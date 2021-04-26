@@ -1,0 +1,2575 @@
+---
+# Source: airflow/templates/scheduler/scheduler-serviceaccount.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Scheduler ServiceAccount
+#################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-scheduler
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::505573090837:role/EKS-USW2-DATALAKE-OIDC-S3-FULL-ACCESS"
+---
+# Source: airflow/templates/webserver/webserver-serviceaccount.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+######################################
+## Airflow Webserver ServiceAccount
+######################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-webserver
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+  annotations:
+  
+    eks.amazonaws.com/role-arn: arn:aws:iam::505573090837:role/EKS-USW2-DATALAKE-OIDC-S3-FULL-ACCESS
+---
+# Source: airflow/templates/workers/worker-serviceaccount.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Worker ServiceAccount
+#################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-worker
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+  annotations:
+    
+    eks.amazonaws.com/role-arn: arn:aws:iam::505573090837:role/POLICY-USW2-DEZ-DATAPLATFORM-SBX-FLUENTD-POD
+---
+# Source: airflow/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: RELEASE-NAME-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-6.3.12
+    release: "RELEASE-NAME"
+    heritage: "Helm"
+type: Opaque
+data:
+  postgresql-password: "cG9zdGdyZXM="
+---
+# Source: airflow/templates/secrets/git-creds-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: RELEASE-NAME-git-creds
+  labels:
+    release: RELEASE-NAME
+    chart: airflow
+    heritage: Helm
+type: Opaque
+data:
+  known_hosts: Yml0YnVja2V0Lm9yZyBzc2gtcnNhIEFBQUFCM056YUMxeWMyRUFBQUFCSXdBQUFRRUF1YmlOODFlRGNhZnJnTWVMemFGUHN3MmtOdkVjcVRLbC9WcUxhdC9NYUIzM3BaeTB5M3JKWnRucXdSMnFPT3Zid0taWUtpRU8xTzZWcU5FQnhLdkpKZWxDcTBkVFhXVDVwYk8yZ0RYQzZoNlFEWENhSG82cE9IR1BVeStZQmFHUVJHdVN1c01FQVNZaVd1bllOMHZDQUk4UWFYbldNWE5NZEZQM2pIQUpIMGVEc29pR25MUEJsQnA0VE5tNnJZSTc0bk16Z3ozQjlJaWtXNFdWSytkYzhLWkpaV1lqQXVPUlUzamMxYy9OUHNrRDJBU2luZjh2M3huZlhldWtVMHNKNU42bTVFOFZMak9iUEVPK21OMnQvRlpUTVpMaUZxUFdjL0FMU3FuTW5uaHdyTmkycmJmZy9yZC9JcEw4TGUzcFNCbmU4K3NlZUZWQm9HcXpITTl5WHc9PQo=
+  ssh: LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0KYjNCbGJuTnphQzFyWlhrdGRqRUFBQUFBQkc1dmJtVUFBQUFFYm05dVpRQUFBQUFBQUFBQkFBQUJsd0FBQUFkemMyZ3RjbgpOaEFBQUFBd0VBQVFBQUFZRUF3RWg1YjUrdWpubHhRdmV4bkZZL3AvcmRuM2JJRDZnVE93SDUrLzJGS0JDK3RVOW5PVU12CkFrTzF4WmxjMVM4a0tIS0EyblFzNEtveTV6enhKUXNISFcxSGVEQ0NKaFNGR0FLc3FCSFpwdHhiVlR3a2M1TUNNVmd1M2YKQm5ua0JraytWanBGS1ZCOUMyamtYN2xTbU9mZ1pXc2hESjBVWDVsUzd0VHpFUE56YjhDMjBkbTNwSnR3blhJWElsUjR6egpPUnFLak50STZXeGNLSGtNUzNQbDEvMjBBa3V3YnhmbHdSN0lVQTRuYmloWVFURTJCTXAwcXpvY2lXZi9wSzdGUmFFTVgxCmdyVzhVenI5aEN4QmFueHdXME5DK3VVUGpEb3grZkV0bEpZTEYyd1Z3UStqUnUrRzhKSEQwUzVEMFpPR2c3Vmw4NDhod0EKajBEWXUyd1g2Z2I1K3g0QVFjajRPSTFNMUpQaWs3Slhlc3U2MHlSbkxIS200ZEI1UUVIZUNTQVFCeTZUOUVuVkNETW5iegphTS9qVDNVYVhLbW10dFNscll1NUFMWVRReDlFc0N2bFBGTXVYenViVGxxS05OT1daaERJMk94MnRHcTlKa1hDTHBma1JJCndVb215R0NBdGNqUG9oWDN2NGk5TGhnZ0w1UHJaUXBpQWVqSEdRQVZBQUFGbUp4ZU9iQ2NYam13QUFBQUIzTnphQzF5YzIKRUFBQUdCQU1CSWVXK2ZybzU1Y1VMM3NaeFdQNmY2M1o5MnlBK29FenNCK2Z2OWhTZ1F2clZQWnpsREx3SkR0Y1daWE5VdgpKQ2h5Z05wMExPQ3FNdWM4OFNVTEJ4MXRSM2d3Z2lZVWhSZ0NyS2dSMmFiY1cxVThKSE9UQWpGWUx0M3daNTVBWkpQbFk2ClJTbFFmUXRvNUYrNVVwam40R1ZySVF5ZEZGK1pVdTdVOHhEemMyL0F0dEhadDZTYmNKMXlGeUpVZU04emthaW96YlNPbHMKWENoNURFdHo1ZGY5dEFKTHNHOFg1Y0VleUZBT0oyNG9XRUV4TmdUS2RLczZISWxuLzZTdXhVV2hERjlZSzF2Rk02L1lRcwpRV3A4Y0Z0RFF2cmxENHc2TWZueExaU1dDeGRzRmNFUG8wYnZodkNSdzlFdVE5R1Rob08xWmZPUEljQUk5QTJMdHNGK29HCitmc2VBRUhJK0RpTlROU1Q0cE95VjNyTHV0TWtaeXh5cHVIUWVVQkIzZ2tnRUFjdWsvUkoxUWd6SjI4MmpQNDA5MUdseXAKcHJiVXBhMkx1UUMyRTBNZlJMQXI1VHhUTGw4N20wNWFpalRUbG1ZUXlOanNkclJxdlNaRndpNlg1RVNNRktKc2hnZ0xYSQp6NklWOTcrSXZTNFlJQytUNjJVS1lnSG94eGtBRlFBQUFBTUJBQUVBQUFHQVUzM2t4UFJZVG1NckxBSHpyRWZESWtTTEFSCmdKck1xMWR2VFh3SFNINGlyTE5GMURIQmt4QzFHdFZ4ek5zMy9odW5KbHd2V1pHd0NzVTc0aGs0MGpUTUxMdXNPTmI4MlAKTVNyUUg3YUloS3pBTjlXQ21uQ21EaGtWV0tkdnhzWjlKYjhBTWpUdG8xUWNRTkRnZWhkdVdRaVZrb0k1cjlZcmxueW03TApFSHcxanJ2bVpsNmNJQ3lpaktzaW9uUjlkTE1XdDE1ODI3N2lkd0tON08yT0I5Vi9sQXRaSjZEUE1hZjIzSFd3T2FXWG5KClFKMkdzRFBjenhEUG5WWjhLZHo4NkM2MnJMYkM2cHY2aTdaTUU4SEM1Q2dPS0RWdTdHMnJTSzljaTV0ZXY5eEc1cDIxalkKS2pZeWFiM1FUd1hNVU9FOFRFMzh2QjRsaHBsRGNxMENzUWxheXBlZm5VK1QxODdFZUNrc0FlVUxZTTRhMnFEaTU4dVVPcgp6SEVjM3hRUnZBYWJhSjhSbkwvVTlDMHBqcEVPQXJ4ZnhueDJYaFJ4blFBVWRjZTJYazhlUEdKK0d6T0xiK0I1NDdUTVN0CjhOK3dWRmlHOStIdEtkVGI4VjhFQXBWdzY1ZEExTjR4V2JOdU0xZFh0QkQrZWJydE5sZGVGSGxScDNCellKM3lPTkFBQUEKd1FDQTI5dlVqa3NHTmxHVHo5dFc4dlJ1U1ZPb0xtOXdMNWNZUzd6bmNMQml6V3NZbDhHU0I2R2dOR2h6WUNZZ053K085bAp5VktHdFZ5V3BoOEhkdGU5emJYUnE3a0ZpVFA1a2gzYlNsZXJlc0xRUzllWVpOeXRNU2Q4QXRRK09RZi8wSHJaVGQzQzdMCmFyN3JOZnJiR1dMMExkSnFoREdTSzYvUGtuYm9LV0U3aEprRG5LcFRqYmdpWTZka0RXeCtob20vTE5wNWpSSEx5VzNRODQKTGJ4Wm4xVUROSW5KK3lyS1ZkaENTKzBmaHBUMktkdHprUDZQTW5WZVZWQ2dPZ3REVUFBQURCQVBUY29WNzRlSk95NGVCZAo3RitiV3p2V2VhQTFLK25kNW5BcjdDYkRqMVVhZ2FzNVd0WTZjNXdGY0pNczdoRnBHT29HMThMdDlENUd3K1ZLSEJGRVpSCllRQ2hZekxQTXpzZHRVeW5pUzF5ZUpIMGRGQUc2ZTgxdUM0Rk1QbEJuVnN0cXpJV0JwajFna25MZ0hmSi9pNnFtUHhkeFUKbWtaYUxKbXU1MmxzdGE4cmdEZjgwWGhKYk1hQzZRTnh6elYwZDJNREdyMGFnRyt4YklHd2lBZm1yaU9CSFp4VkxtMjgrbgpUckw2bXZ0WllmOWt0ZFFRYVZSK3VhVGhXNWFCSlp5d0FBQU1FQXlRZVRHaGJzZnlqaFZmem9ZU3dzVDhqQWtrOFpEUzh0Ci80aXBmcUdGbGx5NEh4QXJUWWNGeFhNOVRRK3pHUzZzYmNUYUx2cGwwT0RqTTZaN3J1N2RKY3ljQW00ME1ZeDcrVHduYUQKM1A3Sjc3TVZFOWQxaFk0QkxKbjgrT1NxMVVIeFdQRTFqdHVjWTVmZGVsandJeVpSckVSbFFvcGwrdXpuZ2hZUDkzVzcrbwozR2ZjMjR4dVpacksxcWpaelRybWVydm1CMHJFVFhJbkdHcGp0UThETXdrTGl4ZE1yZWtiSkdoUVJLM3FlZDBlQkcycVRBCmNPQUh4Yk1TcCtubEdmQUFBQUltdGhiSGxoYm1sQVMyRnNlV0Z1YVhNdFRXRmpRbTl2YXkxQmFYSXViRzlqWVd3PQotLS0tLUVORCBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0K
+---
+# Source: airflow/templates/secrets/metadata-connection-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Metadata Secret
+#################################
+
+kind: Secret
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-airflow-metadata
+  labels:
+    release: RELEASE-NAME
+    chart: airflow
+    heritage: Helm
+type: Opaque
+data:
+  connection: "cG9zdGdyZXNxbDovL3Bvc3RncmVzOnBvc3RncmVzQFJFTEVBU0UtTkFNRS1wb3N0Z3Jlc3FsLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9wb3N0Z3Jlcz9zc2xtb2RlPWRpc2FibGU="
+---
+# Source: airflow/templates/secrets/result-backend-connection-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Result Backend Secret
+#################################
+kind: Secret
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-airflow-result-backend
+  labels:
+    release: RELEASE-NAME
+    chart: airflow
+    heritage: Helm
+type: Opaque
+data:
+  connection: "ZGIrcG9zdGdyZXNxbDovL3Bvc3RncmVzOnBvc3RncmVzQFJFTEVBU0UtTkFNRS1wb3N0Z3Jlc3FsOjU0MzIvcG9zdGdyZXM/c3NsbW9kZT1kaXNhYmxl"
+---
+# Source: airflow/templates/configmaps/configmap.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow ConfigMap
+#################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-airflow-config
+  labels:
+    tier: airflow
+    component: config
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+data:
+  # These are system-specified config overrides.
+  airflow.cfg: |-
+    [api]
+    auth_backend = airflow.api.auth.backend.deny_all
+    
+    [celery]
+    default_queue = celery
+    worker_concurrency = 16
+    
+    [core]
+    colored_console_log = True
+    dags_folder = /opt/airflow/dags/repo/
+    executor = KubernetesExecutor
+    load_examples = False
+    
+    [elasticsearch]
+    json_format = True
+    log_id_template = {dag_id}_{task_id}_{execution_date}_{try_number}
+    
+    [elasticsearch_configs]
+    max_retries = 3
+    retry_timeout = True
+    timeout = 30
+    
+    [kerberos]
+    ccache = /var/kerberos-ccache/cache
+    keytab = /etc/airflow.keytab
+    principal = airflow@FOO.COM
+    reinit_frequency = 3600
+    
+    [kubernetes]
+    airflow_configmap = RELEASE-NAME-airflow-config
+    airflow_local_settings_configmap = RELEASE-NAME-airflow-config
+    delete_worker_pods = True
+    multi_namespace_mode = False
+    namespace = default
+    pod_template_file = /opt/airflow/pod_templates/pod_template_file.yaml
+    worker_container_repository = 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images
+    worker_container_tag = apache-airflow-v2.0.1
+    
+    [logging]
+    colored_console_log = True
+    fab_logging_level = DEBUG
+    logging_level = INFO
+    remote_base_log_folder = cloudwatch://arn:aws:logs:us-west-2:140199734014:log-group:airflow-logs
+    remote_logging = true
+    
+    [metrics]
+    statsd_host = RELEASE-NAME-statsd
+    statsd_on = True
+    statsd_port = 9125
+    statsd_prefix = airflow
+    
+    [scheduler]
+    run_duration = 41460
+    scheduler_heartbeat_sec = 5
+    statsd_host = RELEASE-NAME-statsd
+    statsd_on = True
+    statsd_port = 9125
+    statsd_prefix = airflow
+    
+    [webserver]
+    enable_proxy_fix = True
+    rbac = True
+    
+
+  airflow_local_settings.py: |
+  known_hosts: |
+    
+    bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+    
+  pod_template_file.yaml: |-
+
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #   http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing,
+    # software distributed under the License is distributed on an
+    # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    # KIND, either express or implied.  See the License for the
+    # specific language governing permissions and limitations
+    # under the License.
+    ---
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: dummy-name
+    spec:
+      initContainers:    
+        - name: git-sync
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:gcr-git-sync-v3.1.6
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 65533
+          env:
+            - name: GIT_SSH_KEY_FILE
+              value: "/etc/git-secret/ssh"
+            - name: GIT_SYNC_SSH
+              value: "true"
+            - name: GIT_KNOWN_HOSTS
+              value: "true"
+            - name: GIT_SSH_KNOWN_HOSTS_FILE
+              value: "/etc/git-secret/known_hosts"
+            
+            - name: GIT_SYNC_REV
+              value: "HEAD"
+            - name: GIT_SYNC_BRANCH
+              value: "master"
+            - name: GIT_SYNC_REPO
+              value: "ssh://git@bitbucket.org/8kmilesinternal/dez-airflow-dags.git"
+            - name: GIT_SYNC_DEPTH
+              value: "1"
+            - name: GIT_SYNC_ROOT
+              value: "/git"
+            - name: GIT_SYNC_DEST
+              value: "repo"
+            - name: GIT_SYNC_ADD_USER
+              value: "true"
+            - name: GIT_SYNC_WAIT
+              value: "60"
+            - name: GIT_SYNC_MAX_SYNC_FAILURES
+              value: "0"
+            - name: GIT_SYNC_ONE_TIME
+              value: "true"
+          volumeMounts:
+          - name: dags
+            mountPath: /git
+          - name: git-sync-ssh-key
+            mountPath: /etc/git-secret/ssh
+            readOnly: true
+            subPath: ssh
+          - name: config
+            mountPath: /etc/git-secret/known_hosts
+            readOnly: true
+            subPath: known_hosts
+      containers:
+        - args: []
+          command: []
+          envFrom:      
+            []
+          env:
+            - name: AIRFLOW__CORE__EXECUTOR
+              value: LocalExecutor      
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection      
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          name: base
+          ports: []
+          volumeMounts:
+            - mountPath: "/opt/airflow/logs"
+              name: airflow-logs
+            - name: config
+              mountPath: "/opt/airflow/airflow.cfg"
+              subPath: airflow.cfg
+              readOnly: true
+            - mountPath: /etc/git-secret/known_hosts
+              name: git-sync-known-hosts
+              subPath: known_hosts
+            - mountPath: /etc/git-secret/ssh
+              name: git-sync-ssh-key
+              subPath: ssh
+            - mountPath: /opt/airflow/dags/repo/
+              name: dags
+              readOnly: true
+              subPath: repo/
+      hostNetwork: false
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 50000
+        fsGroup: 50000
+      nodeSelector: 
+        az: zone1
+      affinity: 
+        {}
+      tolerations: 
+        []
+      serviceAccountName: RELEASE-NAME-worker
+      volumes:
+      - name: dags
+        emptyDir: {}  
+      - name: git-sync-ssh-key
+        secret:
+          secretName: airflow-git-creds
+          defaultMode: 288
+      - emptyDir: {}
+        name: airflow-logs
+      - configMap:
+          defaultMode: 288
+          name: RELEASE-NAME-airflow-config
+        name: git-sync-known-hosts
+      - configMap:
+          name: RELEASE-NAME-airflow-config
+        name: config
+---
+# Source: airflow/templates/configmaps/webserver-configmap.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow ConfigMap
+#################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-webserver-config
+  labels:
+    tier: airflow
+    component: config
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+data:
+  webserver_config.py: |
+      from airflow import configuration as conf
+      from flask_appbuilder.security.manager import AUTH_DB,AUTH_LDAP
+
+      # The SQLAlchemy connection string.
+      SQLALCHEMY_DATABASE_URI = conf.get('core', 'SQL_ALCHEMY_CONN')
+
+      # Flask-WTF flag for CSRF
+      CSRF_ENABLED = True
+
+      AUTH_TYPE = AUTH_LDAP
+      AUTH_LDAP_SERVER = "ldap://ldap.dataez.hti.com:389"
+      AUTH_LDAP_USE_TLS = False
+
+      # registration configs
+      AUTH_USER_REGISTRATION = True
+      AUTH_USER_REGISTRATION_ROLE = 'User'
+
+      #AUTH_LDAP_UID_FIELD = 'sAMAccountName'
+      AUTH_LDAP_FIRSTNAME_FIELD = 'givenName'
+      AUTH_LDAP_LASTNAME_FIELD = 'sn'
+      AUTH_LDAP_EMAIL_FIELD = 'mail'
+
+      AUTH_LDAP_BASEDN = "DC=dataez,DC=hti,DC=com"
+
+      # search configs
+      AUTH_LDAP_SEARCH = "DC=dataez,DC=hti,DC=com"
+
+
+      AUTH_LDAP_BIND_USER = "svc-airflow@dataez.hti.com"
+      AUTH_LDAP_BIND_PASSWORD = "2SbKVMQ4Prj6"
+      AUTH_LDAP_UID_FIELD = 'sAMAccountName'
+      #
+      #
+      #
+      AUTH_LDAP_SUPERUSER_FILTER='memberOf=CN=dez-airflow-admin-group,CN=Users,DC=dataez,DC=hti,DC=com'
+      AUTH_LDAP_GROUP_MEMBER_ATTR='memberOf'
+      AUTH_LDAP_USER_NAME_ATTR = 'uid'
+      AUTH_LDAP_USER_FILTER = '|(memberOf=CN=dez-airflow-admin-group,CN=Users,DC=dataez,DC=hti,DC=com)(memberOf=CN=GROUP-DEZ-API-ALL-SBX-ADMIN,CN=Users,DC=dataez,DC=hti,DC=com)'
+      AUTH_LDAP_ALLOW_SELF_SIGNED = True
+---
+# Source: airflow/templates/rbac/pod-launcher-role.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pod Launcher Role
+#################################
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: RELEASE-NAME-pod-launcher-role
+  namespace: default
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "create"
+      - "list"
+      - "get"
+      - "patch"
+      - "watch"
+      - "delete"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/log"
+    verbs:
+      - "get"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/exec"
+    verbs:
+      - "create"
+      - "get"
+  - apiGroups:
+      - ""
+    resources:
+      - "events"
+    verbs:
+      - "list"
+---
+# Source: airflow/templates/rbac/pod-log-reader-role.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pod Reader Role
+#################################
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: RELEASE-NAME-pod-log-reader-role
+  namespace: default
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "list"
+      - "get"
+      - "watch"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/log"
+    verbs:
+      - "get"
+      - "list"
+---
+# Source: airflow/templates/rbac/pod-launcher-rolebinding.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pod Launcher Role Binding
+#################################
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: RELEASE-NAME-pod-launcher-rolebinding
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: RELEASE-NAME-pod-launcher-role
+subjects:
+  - kind: ServiceAccount
+    name: RELEASE-NAME-scheduler
+    namespace: default
+  - kind: ServiceAccount
+    name: RELEASE-NAME-worker
+    namespace: default
+---
+# Source: airflow/templates/rbac/pod-log-reader-rolebinding.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pod Reader Role Binding
+#################################
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: RELEASE-NAME-pod-log-reader-rolebinding
+  labels:
+    tier: airflow
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: RELEASE-NAME-pod-log-reader-role
+subjects:
+  - kind: ServiceAccount
+    name: RELEASE-NAME-webserver
+    namespace: default
+---
+# Source: airflow/charts/postgresql/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: RELEASE-NAME-postgresql-headless
+  labels:
+    app: postgresql
+    chart: postgresql-6.3.12
+    release: "RELEASE-NAME"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: postgresql
+  selector:
+    app: postgresql
+    release: "RELEASE-NAME"
+---
+# Source: airflow/charts/postgresql/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: RELEASE-NAME-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-6.3.12
+    release: "RELEASE-NAME"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: postgresql
+  selector:
+    app: postgresql
+    release: "RELEASE-NAME"
+    role: master
+---
+# Source: airflow/templates/statsd/statsd-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow StatsD Service
+#################################
+kind: Service
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-statsd
+  labels:
+    tier: airflow
+    component: statsd
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9102"
+spec:
+  type: ClusterIP
+  selector:
+    tier: airflow
+    component: statsd
+    release: RELEASE-NAME
+  ports:
+    - name: statsd-ingest
+      protocol: UDP
+      port: 9125
+      targetPort: 9125
+    - name: statsd-scrape
+      protocol: TCP
+      port: 9102
+      targetPort: 9102
+---
+# Source: airflow/templates/webserver/webserver-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Webserver Service
+#################################
+kind: Service
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-webserver
+  labels:
+    tier: airflow
+    component: webserver
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+spec:
+  type: ClusterIP
+  selector:
+    tier: airflow
+    component: webserver
+    release: RELEASE-NAME
+  ports:
+    - name: airflow-ui
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+# Source: airflow/templates/scheduler/scheduler-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Scheduler Deployment/StatefulSet
+#################################
+
+# Are we using a local/sequential executor?
+# Is persistence enabled on the _workers_?
+# This is important because in $local mode, the scheduler assumes the role of the worker
+# If we're using a StatefulSet
+# If we're using elasticsearch logging
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: RELEASE-NAME-scheduler
+  labels:
+    tier: airflow
+    component: scheduler
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: airflow
+      component: scheduler
+      release: RELEASE-NAME
+  template:
+    metadata:
+      labels:
+        tier: airflow
+        component: scheduler
+        release: RELEASE-NAME
+      annotations:
+        checksum/metadata-secret: a3512f27fea8455cdddc51ef650052d74657bcaa16194d24b555417e312d43da
+        checksum/result-backend-secret: 4bd4a60ef60435fe29fc8135a43a436c0854074a228246c67a6e7488b138200f
+        checksum/pgbouncer-config-secret: da52bd1edfe820f0ddfacdebb20a4cc6407d296ee45bcb500a6407e2261a5ba2
+        checksum/airflow-config: d7f71b36ba44f123bc85d800815326ddf26b1cd2c2b544deb5229b554a29911c
+        checksum/extra-configmaps: 2e44e493035e2f6a255d08f8104087ff10d30aef6f63176f1b18f75f73295598
+        checksum/extra-secrets: bb91ef06ddc31c0c5a29973832163d8b0b597812a793ef911d33b622bc9d1655
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    spec:
+      nodeSelector:
+        az: zone1
+      affinity:
+        {}
+      tolerations:
+        []
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: RELEASE-NAME-scheduler
+      securityContext:
+        runAsUser: 50000
+        fsGroup: 50000
+      initContainers:
+        - name: wait-for-airflow-migrations
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          args:          
+            
+            - python
+            - -c
+            - |
+                  import airflow
+                  import logging
+                  import os
+                  import time
+          
+                  from alembic.config import Config
+                  from alembic.runtime.migration import MigrationContext
+                  from alembic.script import ScriptDirectory
+          
+                  from airflow import settings
+          
+                  package_dir = os.path.abspath(os.path.dirname(airflow.__file__))
+                  directory = os.path.join(package_dir, 'migrations')
+                  config = Config(os.path.join(package_dir, 'alembic.ini'))
+                  config.set_main_option('script_location', directory)
+                  config.set_main_option('sqlalchemy.url', settings.SQL_ALCHEMY_CONN.replace('%', '%%'))
+                  script_ = ScriptDirectory.from_config(config)
+          
+                  timeout=60
+          
+                  with settings.engine.connect() as connection:
+                      context = MigrationContext.configure(connection)
+                      ticker = 0
+                      while True:
+                          source_heads = set(script_.get_heads())
+          
+                          db_heads = set(context.get_current_heads())
+                          if source_heads == db_heads:
+                              break
+          
+                          if ticker >= timeout:
+                              raise TimeoutError("There are still unapplied migrations after {} seconds.".format(ticker))
+                          ticker += 1
+                          time.sleep(1)
+                          logging.info('Waiting for migrations... %s second(s)', ticker)
+          envFrom:          
+            []
+          env:          
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env          
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+      containers:
+        # Always run the main scheduler container.
+        - name: scheduler
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          args: ["bash", "-c", "exec airflow scheduler"]
+          envFrom:          
+            []
+          env:          
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env          
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+          # If the scheduler stops heartbeating for 5 minutes (10*30s) kill the
+          # scheduler and let Kubernetes restart it
+          livenessProbe:
+            failureThreshold: 10
+            periodSeconds: 30
+            exec:
+              command:
+              - python
+              - -Wignore
+              - -c
+              - |
+                import os
+                os.environ['AIRFLOW__CORE__LOGGING_LEVEL'] = 'ERROR'
+                os.environ['AIRFLOW__LOGGING__LOGGING_LEVEL'] = 'ERROR'
+
+                from airflow.jobs.scheduler_job import SchedulerJob
+                from airflow.utils.db import create_session
+                from airflow.utils.net import get_hostname
+                import sys
+
+                with create_session() as session:
+                    job = session.query(SchedulerJob).filter_by(hostname=get_hostname()).order_by(
+                        SchedulerJob.latest_heartbeat.desc()).limit(1).first()
+
+                sys.exit(0 if job.is_alive() else 1)
+          resources:
+            {}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/airflow/pod_templates/pod_template_file.yaml
+              subPath: pod_template_file.yaml
+              readOnly: true
+            - name: logs
+              mountPath: "/opt/airflow/logs"
+            - name: config
+              mountPath: "/opt/airflow/airflow.cfg"
+              subPath: airflow.cfg
+              readOnly: true
+            - name: dags
+              mountPath: /opt/airflow/dags        
+        - name: git-sync
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:gcr-git-sync-v3.1.6
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 65533
+          env:
+            - name: GIT_SSH_KEY_FILE
+              value: "/etc/git-secret/ssh"
+            - name: GIT_SYNC_SSH
+              value: "true"
+            - name: GIT_KNOWN_HOSTS
+              value: "true"
+            - name: GIT_SSH_KNOWN_HOSTS_FILE
+              value: "/etc/git-secret/known_hosts"
+            
+            - name: GIT_SYNC_REV
+              value: "HEAD"
+            - name: GIT_SYNC_BRANCH
+              value: "master"
+            - name: GIT_SYNC_REPO
+              value: "ssh://git@bitbucket.org/8kmilesinternal/dez-airflow-dags.git"
+            - name: GIT_SYNC_DEPTH
+              value: "1"
+            - name: GIT_SYNC_ROOT
+              value: "/git"
+            - name: GIT_SYNC_DEST
+              value: "repo"
+            - name: GIT_SYNC_ADD_USER
+              value: "true"
+            - name: GIT_SYNC_WAIT
+              value: "60"
+            - name: GIT_SYNC_MAX_SYNC_FAILURES
+              value: "0"
+          volumeMounts:
+          - name: dags
+            mountPath: /git
+          - name: git-sync-ssh-key
+            mountPath: /etc/git-secret/ssh
+            readOnly: true
+            subPath: ssh
+          - name: config
+            mountPath: /etc/git-secret/known_hosts
+            readOnly: true
+            subPath: known_hosts
+        # Always start the garbage collector sidecar.
+        - name: scheduler-gc
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          args: ["bash", "/clean-logs"]
+          volumeMounts:
+            - name: logs
+              mountPath: "/opt/airflow/logs"
+      volumes:
+        - name: config
+          configMap:
+            name: RELEASE-NAME-airflow-config
+        - name: dags
+          emptyDir: {}        
+        - name: git-sync-ssh-key
+          secret:
+            secretName: airflow-git-creds
+            defaultMode: 288
+        - name: logs
+          emptyDir: {}
+---
+# Source: airflow/templates/statsd/statsd-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow StatsD Deployment
+#################################
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: RELEASE-NAME-statsd
+  labels:
+    tier: airflow
+    component: statsd
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: airflow
+      component: statsd
+      release: RELEASE-NAME
+  template:
+    metadata:
+      labels:
+        tier: airflow
+        component: statsd
+        release: RELEASE-NAME
+    spec:
+      nodeSelector:
+        az: zone1
+      affinity:
+        {}
+      tolerations:
+        []
+      restartPolicy: Always
+      containers:
+        - name: statsd
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:airflow-statsd-exporter-2020.09.05-v0.17.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--statsd.mapping-config=/etc/statsd-exporter/mappings.yml"
+          resources:
+            {}
+          ports:
+            - name: statsd-ingest
+              protocol: UDP
+              containerPort: 9125
+            - name: statsd-scrape
+              containerPort: 9102
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 9102
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 9102
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+---
+# Source: airflow/templates/webserver/webserver-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Webserver Deployment
+#################################
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: RELEASE-NAME-webserver
+  labels:
+    tier: airflow
+    component: webserver
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      tier: airflow
+      component: webserver
+      release: RELEASE-NAME
+  template:
+    metadata:
+      labels:
+        tier: airflow
+        component: webserver
+        release: RELEASE-NAME
+      annotations:
+        checksum/metadata-secret: a3512f27fea8455cdddc51ef650052d74657bcaa16194d24b555417e312d43da
+        checksum/pgbouncer-config-secret: da52bd1edfe820f0ddfacdebb20a4cc6407d296ee45bcb500a6407e2261a5ba2
+        checksum/airflow-config: d7f71b36ba44f123bc85d800815326ddf26b1cd2c2b544deb5229b554a29911c
+        checksum/webserver-config: 3cd5f8a05468c75f7c739266dac4240ae8d32666b641aecc27053bcdc4342a38
+        checksum/extra-configmaps: 2e44e493035e2f6a255d08f8104087ff10d30aef6f63176f1b18f75f73295598
+        checksum/extra-secrets: bb91ef06ddc31c0c5a29973832163d8b0b597812a793ef911d33b622bc9d1655
+    spec:
+      serviceAccountName: RELEASE-NAME-webserver
+      nodeSelector:
+        az: zone1
+      affinity:
+        {}
+      tolerations:
+        []
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 50000
+        fsGroup: 50000
+      initContainers:
+        - name: wait-for-airflow-migrations
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          args:          
+            
+            - python
+            - -c
+            - |
+                  import airflow
+                  import logging
+                  import os
+                  import time
+          
+                  from alembic.config import Config
+                  from alembic.runtime.migration import MigrationContext
+                  from alembic.script import ScriptDirectory
+          
+                  from airflow import settings
+          
+                  package_dir = os.path.abspath(os.path.dirname(airflow.__file__))
+                  directory = os.path.join(package_dir, 'migrations')
+                  config = Config(os.path.join(package_dir, 'alembic.ini'))
+                  config.set_main_option('script_location', directory)
+                  config.set_main_option('sqlalchemy.url', settings.SQL_ALCHEMY_CONN.replace('%', '%%'))
+                  script_ = ScriptDirectory.from_config(config)
+          
+                  timeout=60
+          
+                  with settings.engine.connect() as connection:
+                      context = MigrationContext.configure(connection)
+                      ticker = 0
+                      while True:
+                          source_heads = set(script_.get_heads())
+          
+                          db_heads = set(context.get_current_heads())
+                          if source_heads == db_heads:
+                              break
+          
+                          if ticker >= timeout:
+                              raise TimeoutError("There are still unapplied migrations after {} seconds.".format(ticker))
+                          ticker += 1
+                          time.sleep(1)
+                          logging.info('Waiting for migrations... %s second(s)', ticker)
+          envFrom:          
+            []
+          env:          
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env          
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+      containers:        
+        - name: git-sync
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:gcr-git-sync-v3.1.6
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 65533
+          env:
+            - name: GIT_SSH_KEY_FILE
+              value: "/etc/git-secret/ssh"
+            - name: GIT_SYNC_SSH
+              value: "true"
+            - name: GIT_KNOWN_HOSTS
+              value: "true"
+            - name: GIT_SSH_KNOWN_HOSTS_FILE
+              value: "/etc/git-secret/known_hosts"
+            
+            - name: GIT_SYNC_REV
+              value: "HEAD"
+            - name: GIT_SYNC_BRANCH
+              value: "master"
+            - name: GIT_SYNC_REPO
+              value: "ssh://git@bitbucket.org/8kmilesinternal/dez-airflow-dags.git"
+            - name: GIT_SYNC_DEPTH
+              value: "1"
+            - name: GIT_SYNC_ROOT
+              value: "/git"
+            - name: GIT_SYNC_DEST
+              value: "repo"
+            - name: GIT_SYNC_ADD_USER
+              value: "true"
+            - name: GIT_SYNC_WAIT
+              value: "60"
+            - name: GIT_SYNC_MAX_SYNC_FAILURES
+              value: "0"
+          volumeMounts:
+          - name: dags
+            mountPath: /git
+          - name: git-sync-ssh-key
+            mountPath: /etc/git-secret/ssh
+            readOnly: true
+            subPath: ssh
+          - name: config
+            mountPath: /etc/git-secret/known_hosts
+            readOnly: true
+            subPath: known_hosts
+        - name: webserver
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          args: ["bash", "-c", "exec airflow webserver"]
+          resources:
+            {}
+          volumeMounts:
+            - name: config
+              mountPath: "/opt/airflow/airflow.cfg"
+              subPath: airflow.cfg
+              readOnly: true
+            - name: webserver-config
+              mountPath: "/opt/airflow/webserver_config.py"
+              subPath: webserver_config.py
+              readOnly: true
+            - name: dags
+              mountPath: /opt/airflow/dags
+          ports:
+            - name: webserver-ui
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 20
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 20
+            periodSeconds: 5
+          envFrom:          
+            []
+          env:          
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env          
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+      volumes:
+        - name: config
+          configMap:
+            name: RELEASE-NAME-airflow-config
+        - name: webserver-config
+          configMap:
+            name: RELEASE-NAME-webserver-config
+        - name: dags
+          emptyDir: {}        
+        - name: git-sync-ssh-key
+          secret:
+            secretName: airflow-git-creds
+            defaultMode: 288
+---
+# Source: airflow/charts/postgresql/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: RELEASE-NAME-postgresql
+  labels:
+    app: postgresql
+    chart: postgresql-6.3.12
+    release: "RELEASE-NAME"
+    heritage: "Helm"
+spec:
+  serviceName: RELEASE-NAME-postgresql-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: postgresql
+      release: "RELEASE-NAME"
+      role: master
+  template:
+    metadata:
+      name: RELEASE-NAME-postgresql
+      labels:
+        app: postgresql
+        chart: postgresql-6.3.12
+        release: "RELEASE-NAME"
+        heritage: "Helm"
+        role: master
+    spec:      
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+      - name: init-chmod-data
+        image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:bitnami-minideb-stretch
+        imagePullPolicy: "Always"
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        command:
+          - sh
+          - -c
+          - |
+            mkdir -p /bitnami/postgresql/data
+            chmod 700 /bitnami/postgresql/data
+            find /bitnami/postgresql -mindepth 0 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              xargs chown -R 1001:1001
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/postgresql
+          subPath: 
+      containers:
+      - name: RELEASE-NAME-postgresql
+        image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:bitnami-postgresql-11.5.0-debian-9-r60
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          runAsUser: 1001
+        env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: "/bitnami/postgresql"
+        - name: PGDATA
+          value: "/bitnami/postgresql/data"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: RELEASE-NAME-postgresql
+              key: postgresql-password
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - -e
+            - |
+              pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/postgresql
+          subPath: 
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: airflow/templates/migrate-database-job.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Run Migrations
+#################################
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: RELEASE-NAME-run-airflow-migrations
+  labels:
+    tier: airflow
+    component: run-airflow-migrations
+    release: RELEASE-NAME
+    chart: "airflow-1.0.6"
+    heritage: Helm
+spec:
+  template:
+    metadata:
+      labels:
+        tier: airflow
+        component: run-airflow-migrations
+        release: RELEASE-NAME
+    spec:
+      securityContext:
+          runAsUser: 50000
+      restartPolicy: OnFailure
+      nodeSelector:
+        az: zone1
+      affinity:
+        {}
+      tolerations:
+        []
+      containers:
+        - name: run-airflow-migrations
+          image: 140199734014.dkr.ecr.us-west-2.amazonaws.com/common-images:apache-airflow-v2.0.1
+          imagePullPolicy: IfNotPresent
+          # Support running against 1.10.x and 2.0.0dev/master
+          args: ["bash", "-c", "airflow db upgrade || airflow upgradedb"]
+          envFrom:          
+            []
+          env:          
+            # Dynamically created environment variables
+            # Dynamically created secret envs
+            
+            # Extra env          
+            # Hard Coded Airflow Envs
+            - name: AIRFLOW__CORE__FERNET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-fernet-key
+                  key: fernet-key
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+            - name: AIRFLOW_CONN_AIRFLOW_DB
+              valueFrom:
+                secretKeyRef:
+                  name: RELEASE-NAME-airflow-metadata
+                  key: connection
+          volumeMounts:
+            - name: config
+              mountPath: "/opt/airflow/airflow.cfg"
+              subPath: airflow.cfg
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: RELEASE-NAME-airflow-config
+---
+# Source: airflow/templates/check-values.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+---
+# Source: airflow/templates/cleanup/cleanup-cronjob.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Cleanup Pods CronJob
+#################################
+---
+# Source: airflow/templates/cleanup/cleanup-serviceaccount.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Cleanup ServiceAccount
+#################################
+---
+# Source: airflow/templates/configmaps/extra-configmaps.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+####################################################
+## Extra ConfigMaps provisioned via the chart values
+####################################################
+---
+# Source: airflow/templates/configmaps/statsd-configmap.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow StatsD ConfigMap
+#################################
+---
+# Source: airflow/templates/create-user-job.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Create User Job
+#################################
+---
+# Source: airflow/templates/dags-persistent-volume-claim.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+---
+# Source: airflow/templates/flower/flower-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Flower Deployment
+#################################
+---
+# Source: airflow/templates/flower/flower-ingress.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Flower Ingress
+#################################
+---
+# Source: airflow/templates/flower/flower-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Flower NetworkPolicy
+#################################
+---
+# Source: airflow/templates/flower/flower-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Flower Service Component
+#################################
+---
+# Source: airflow/templates/limitrange.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Namespace LimitRange
+#################################
+---
+# Source: airflow/templates/pgbouncer/pgbouncer-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pgbouncer Deployment
+#################################
+---
+# Source: airflow/templates/pgbouncer/pgbouncer-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Pgbouncer NetworkPolicy
+#################################
+---
+# Source: airflow/templates/pgbouncer/pgbouncer-poddisruptionbudget.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Pgbouncer PodDisruptionBudget
+#################################
+---
+# Source: airflow/templates/pgbouncer/pgbouncer-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Pgbouncer Service
+#################################
+---
+# Source: airflow/templates/rbac/pod-cleanup-role.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Cleanup Role
+#################################
+---
+# Source: airflow/templates/rbac/pod-cleanup-rolebinding.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Cleanup Role Binding
+#################################
+---
+# Source: airflow/templates/redis/redis-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Redis NetworkPolicy
+#################################
+---
+# Source: airflow/templates/redis/redis-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Redis Service
+#################################
+---
+# Source: airflow/templates/redis/redis-statefulset.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Redis StatefulSet
+#################################
+---
+# Source: airflow/templates/resourcequota.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Namespace ResourceQuota
+#################################
+---
+# Source: airflow/templates/scheduler/scheduler-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Scheduler NetworkPolicy
+#################################
+---
+# Source: airflow/templates/scheduler/scheduler-poddisruptionbudget.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Scheduler PodDisruptionBudget
+#################################
+---
+# Source: airflow/templates/scheduler/scheduler-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Scheduler Service
+#################################
+---
+# Source: airflow/templates/secrets/elasticsearch-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Elasticsearch Secret
+#################################
+---
+# Source: airflow/templates/secrets/extra-secrets.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+#################################################
+## Extra Secrets provisioned via the chart values
+#################################################
+---
+# Source: airflow/templates/secrets/flower-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Flower Secret
+#################################
+---
+# Source: airflow/templates/secrets/pgbouncer-certificates-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Pgbouncer Certificate Secret
+#################################
+---
+# Source: airflow/templates/secrets/pgbouncer-config-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Pgbouncer Config Secret
+#################################
+---
+# Source: airflow/templates/secrets/pgbouncer-stats-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Pgbouncer Stats Secret
+#################################
+---
+# Source: airflow/templates/secrets/redis-secrets.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Redis Password Secret
+#################################
+---
+# Source: airflow/templates/secrets/registry-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Registry Secret
+#################################
+---
+# Source: airflow/templates/statsd/statsd-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow StatsD NetworkPolicy
+#################################
+---
+# Source: airflow/templates/webserver/webserver-ingress.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Webserver Ingress
+#################################
+---
+# Source: airflow/templates/webserver/webserver-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Webserver NetworkPolicy
+#################################
+---
+# Source: airflow/templates/workers/worker-deployment.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Worker Deployment
+#################################
+---
+# Source: airflow/templates/workers/worker-kedaautoscaler.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Worker KEDA Scaler
+#################################
+---
+# Source: airflow/templates/workers/worker-networkpolicy.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Worker NetworkPolicy
+#################################
+---
+# Source: airflow/templates/workers/worker-service.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Worker Service
+#################################
+---
+# Source: airflow/templates/secrets/fernetkey-secret.yaml
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+################################
+## Airflow Fernet Key Secret
+#################################
+
+kind: Secret
+apiVersion: v1
+metadata:
+  name: RELEASE-NAME-fernet-key
+  labels:
+    release: RELEASE-NAME
+    chart: airflow
+    heritage: Helm
+  annotations:
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-weight": "0"
+type: Opaque
+data:
+  fernet-key: "VDBSQ2VXSk5SWG80T1hwTFpXdFBhMWhRVjNwamRHRjFkWFJRTTNWTlNrZz0="
