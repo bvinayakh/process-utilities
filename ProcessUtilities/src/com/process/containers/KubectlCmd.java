@@ -12,8 +12,8 @@ import com.process.utils.JSONOM;
 
 public class KubectlCmd
 {
-  private String kubeCtlBinaryLocation = ApplicationProperties.getProperties("kubectl.executable.location");
-  private boolean useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use.kubeconfig"));
+  private String kubeCtlBinaryLocation = ApplicationProperties.getProperties("kubectl_executable_location");
+  private boolean useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use_kubeconfig"));
 
   private Runner runner = null;
 
@@ -41,7 +41,7 @@ public class KubectlCmd
     cmd.append(namespace + " ");
     cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
     cmd.append("-o json" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -87,7 +87,7 @@ public class KubectlCmd
     cmd.append("namespace" + " ");
     cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
     cmd.append("-o json" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -140,7 +140,7 @@ public class KubectlCmd
     cmd.append("get" + " ");
     cmd.append("pods" + " ");
     cmd.append("-o json" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -193,7 +193,7 @@ public class KubectlCmd
     cmd.append(namespace + " ");
     cmd.append("-o name" + " ");
     cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();

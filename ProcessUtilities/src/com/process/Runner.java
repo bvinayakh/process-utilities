@@ -35,7 +35,10 @@ public class Runner
   public JsonNode runExec(StringBuffer cmd) throws IOException, InterruptedException
   {
     Map<String, String> environmentVars = new HashMap<>();
-    environmentVars.put("PATH", ApplicationProperties.getProperties("env.path"));
+    String envVars = ApplicationProperties.getProperties("env_path");
+    if (envVars != null) environmentVars.put("PATH", envVars);
+    else
+      environmentVars.put("PATH", System.getenv("PATH"));
     return runExec(cmd, environmentVars);
   }
 
@@ -54,7 +57,7 @@ public class Runner
     DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
     CommandLine commands = CommandLine.parse(cmd.toString());
     // timeout 1 minute
-    Long timeout = Long.valueOf(ApplicationProperties.getProperties("process.timeout"));
+    Long timeout = Long.valueOf(ApplicationProperties.getProperties("process_timeout"));
     ExecuteWatchdog watchdog = new ExecuteWatchdog(timeout);
     PumpStreamHandler streamHander = new PumpStreamHandler(stdoutStream, stderrStream);
     executor.setStreamHandler(streamHander);
@@ -106,7 +109,7 @@ public class Runner
     ObjectNode outputNode = mapper.createObjectNode();
 
     if (envVars == null) envVars = new ArrayList<String>();
-    envVars.add("PATH=" + ApplicationProperties.getProperties("env.path"));
+    envVars.add("PATH=" + ApplicationProperties.getProperties("env_path"));
     String[] env = Arrays.stream(envVars.toArray()).toArray(String[]::new);
 
     Process pr = rt.exec(cmd.toString(), env, null);

@@ -18,8 +18,8 @@ import com.process.utils.JSONOM;
 
 public class HelmCmd
 {
-  private boolean useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use.kubeconfig"));
-  private String helmBinaryLocation = ApplicationProperties.getProperties("helm.executable.location");
+  private boolean useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use_kubeconfig"));
+  private String helmBinaryLocation = ApplicationProperties.getProperties("helm_executable_location");
 
   private Runner runner = null;
 
@@ -54,7 +54,7 @@ public class HelmCmd
     cmd.append("list" + " ");
     cmd.append("-a -A" + " ");
     cmd.append("-o" + " " + "json" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -90,8 +90,8 @@ public class HelmCmd
     cmd.append("uninstall" + " ");
     cmd.append(releaseName + " ");
     cmd.append("--namespace" + " " + namespace + " ");
-    if (Boolean.valueOf(ApplicationProperties.getProperties("debug.enabled"))) cmd.append("--debug" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_locationlocation") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -132,7 +132,7 @@ public class HelmCmd
     cmd.append("values" + " ");
     cmd.append(chartName + " ");
     cmd.append("--insecure-skip-tls-verify" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     parentNode = mapper.createObjectNode();
@@ -186,18 +186,18 @@ public class HelmCmd
 
     StringBuffer cmd = new StringBuffer();
     cmd.append(helmBinaryLocation + " ");
-    // cmd.append("upgrade" + " ");
-    // cmd.append("--install" + " ");
-    cmd.append("install" + " ");
+    cmd.append("upgrade" + " ");
+    cmd.append("--install" + " ");
+    // cmd.append("install" + " ");
     cmd.append(releaseName + " ");
     cmd.append(repoName + "/" + chartName + " ");
     cmd.append("-f" + " " + releaseName + "-values.yaml" + " ");
     cmd.append("--version" + " " + chartVersion + " ");
     cmd.append("--namespace" + " " + namespace + " ");
     cmd.append("-o" + " " + "json" + " ");
-    if (Boolean.valueOf(ApplicationProperties.getProperties("debug.enabled"))) cmd.append("--debug" + " ");
+    if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
 
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -245,8 +245,8 @@ public class HelmCmd
     cmd.append("list" + " ");
     cmd.append("-a -A" + " ");
     cmd.append("-o" + " " + "json" + " ");
-    if (Boolean.valueOf(ApplicationProperties.getProperties("debug.enabled"))) cmd.append("--debug" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config.file.location") + " ");
+    if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
@@ -392,7 +392,7 @@ public class HelmCmd
 
     return valid;
   }
-  
+
   public static void main(String[] args)
   {
     try
