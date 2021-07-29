@@ -39,8 +39,9 @@ public class KubectlCmd
     cmd.append("create" + " ");
     cmd.append("namespace" + " ");
     cmd.append(namespace + " ");
-    cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
     cmd.append("-o json" + " ");
+    // cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + "
+    // ");
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
