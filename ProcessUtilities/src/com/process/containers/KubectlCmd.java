@@ -85,8 +85,9 @@ public class KubectlCmd
     cmd.append(kubeCtlBinaryLocation + " ");
     cmd.append("get" + " ");
     cmd.append("namespace" + " ");
-    cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
     cmd.append("-o json" + " ");
+    // cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + "
+    // ");
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
@@ -192,7 +193,8 @@ public class KubectlCmd
     cmd.append("namespace" + " ");
     cmd.append(namespace + " ");
     cmd.append("-o name" + " ");
-    cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + " ");
+    // cmd.append("--context=" + "arn:aws:eks:" + region + ":" + account + ":cluster/" + clusterName + "
+    // ");
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
