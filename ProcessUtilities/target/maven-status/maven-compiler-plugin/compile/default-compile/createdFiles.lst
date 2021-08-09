@@ -1,5 +1,0 @@
-com/process/containers/KubectlCmd.class
-com/process/containers/HelmCmd.class
-com/process/utils/ApplicationProperties.class
-com/process/Runner.class
-com/process/utils/JSONOM.class
