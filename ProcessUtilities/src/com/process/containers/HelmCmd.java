@@ -188,7 +188,9 @@ public class HelmCmd
 
     // reading kube token instead of kubeconfig
     String kubeToken = null;
-    BufferedReader reader = new BufferedReader(new FileReader(ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE")));
+    String fileLocation = ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE");
+    System.out.println(fileLocation);
+    BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
     kubeToken = reader.readLine();
     reader.close();
 

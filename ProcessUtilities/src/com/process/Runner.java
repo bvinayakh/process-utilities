@@ -38,7 +38,11 @@ public class Runner
     String envVars = ApplicationProperties.getProperties("env_path");
     if (envVars != null) environmentVars.put("PATH", envVars);
     else
+    {
+      //executed on eks platform
       environmentVars.put("PATH", System.getenv("PATH"));
+      environmentVars.put("AWS_WEB_IDENTITY_TOKEN_FILE", ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE"));
+    }
     return runExec(cmd, environmentVars);
   }
 
@@ -77,7 +81,7 @@ public class Runner
     {
       outputValid.append(stdOut);
       outputValid.append(System.lineSeparator());
-      logger.debug("Encoded Output: "+Base64.getEncoder().encodeToString(stdOut.getBytes()));
+      logger.debug("Encoded Output: " + Base64.getEncoder().encodeToString(stdOut.getBytes()));
     }
 
     if (stdErr.length() > 5)
@@ -85,12 +89,12 @@ public class Runner
       if (stdErr.toLowerCase().startsWith("warn"))
       {
         outputWarning.append(stdErr);
-        logger.debug("Encoded Warning: "+Base64.getEncoder().encodeToString(stdErr.getBytes()));
+        logger.debug("Encoded Warning: " + Base64.getEncoder().encodeToString(stdErr.getBytes()));
       }
       else
       {
         outputError.append(stdErr);
-        logger.debug("Encoded Error: "+Base64.getEncoder().encodeToString(stdErr.getBytes()));
+        logger.debug("Encoded Error: " + Base64.getEncoder().encodeToString(stdErr.getBytes()));
       }
     }
 
