@@ -39,9 +39,11 @@ public class Runner
     if (envVars != null) environmentVars.put("PATH", envVars);
     else
     {
-      //executed on eks platform
-      environmentVars.put("PATH", System.getenv("PATH"));
-      environmentVars.put("AWS_WEB_IDENTITY_TOKEN_FILE", ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE"));
+      // executed on eks platform
+      // environmentVars.put("PATH", System.getenv("PATH"));
+      // environmentVars.put("AWS_WEB_IDENTITY_TOKEN_FILE",
+      // ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE"));
+      environmentVars = System.getenv();
     }
     return runExec(cmd, environmentVars);
   }
