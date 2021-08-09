@@ -186,14 +186,6 @@ public class HelmCmd
     // update helm repo on the instance before installing/upgrading helm chart
     helmRepoUpdate();
 
-    // reading kube token instead of kubeconfig
-    String kubeToken = null;
-    String fileLocation = ApplicationProperties.getProperties("AWS_WEB_IDENTITY_TOKEN_FILE");
-    System.out.println(fileLocation);
-    BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
-    kubeToken = reader.readLine();
-    reader.close();
-
     StringBuffer cmd = new StringBuffer();
     cmd.append(helmBinaryLocation + " ");
     cmd.append("upgrade" + " ");
@@ -204,7 +196,6 @@ public class HelmCmd
     cmd.append("-f" + " " + releaseName + "-values.yaml" + " ");
     cmd.append("--version" + " " + chartVersion + " ");
     cmd.append("--namespace" + " " + namespace + " ");
-    if (kubeToken != null) cmd.append("--kube-token" + " " + kubeToken + " ");
     cmd.append("-o" + " " + "json" + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
 
