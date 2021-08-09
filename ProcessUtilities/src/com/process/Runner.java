@@ -77,6 +77,7 @@ public class Runner
     {
       outputValid.append(stdOut);
       outputValid.append(System.lineSeparator());
+      logger.debug("Encoded Output: "+Base64.getEncoder().encodeToString(stdOut.getBytes()));
     }
 
     if (stdErr.length() > 5)
@@ -84,9 +85,13 @@ public class Runner
       if (stdErr.toLowerCase().startsWith("warn"))
       {
         outputWarning.append(stdErr);
+        logger.debug("Encoded Warning: "+Base64.getEncoder().encodeToString(stdErr.getBytes()));
       }
       else
+      {
         outputError.append(stdErr);
+        logger.debug("Encoded Error: "+Base64.getEncoder().encodeToString(stdErr.getBytes()));
+      }
     }
 
     String encodedOutput = Base64.getEncoder().encodeToString(outputValid.toString().getBytes());
@@ -109,7 +114,11 @@ public class Runner
     ObjectNode outputNode = mapper.createObjectNode();
 
     if (envVars == null) envVars = new ArrayList<String>();
-    envVars.add("PATH=" + ApplicationProperties.getProperties("env_path"));
+    // envVars.add("PATH=" + ApplicationProperties.getProperties("env_path"));
+    String path = ApplicationProperties.getProperties("env_path");
+    if (path != null) envVars.add("PATH=" + path);
+    else
+      envVars.add("PATH=" + System.getenv("PATH"));
     String[] env = Arrays.stream(envVars.toArray()).toArray(String[]::new);
 
     Process pr = rt.exec(cmd.toString(), env, null);

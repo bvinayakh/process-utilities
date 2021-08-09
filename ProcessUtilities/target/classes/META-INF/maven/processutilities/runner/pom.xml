@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>processutilities</groupId>
 	<artifactId>runner</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.8</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<finalName>processutilities</finalName>
@@ -32,7 +32,7 @@
 							<url>http://private-mave-ac51747055feb426.elb.us-west-2.amazonaws.com/repository/processutilities</url>
 							<groupId>processutilities</groupId>
 							<artifactId>runner</artifactId>
-							<version>1.0.1</version>
+							<version>1.0.9</version>
 							<packaging>jar</packaging>
 						</configuration>
 					</execution>
