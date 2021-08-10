@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.Map;
@@ -180,7 +181,7 @@ public class HelmCmd
   /*
    * releaseName: Helm Release Name
    */
-  public JsonNode helmUpgrade(String releaseName, String repoName, String chartName, String chartVersion, String namespace)
+  public JsonNode helmUpgrade(String releaseName, String repoName, String chartName, String chartVersion, String namespace, ArrayList<String> parameters)
       throws IOException, InterruptedException, InvalidConfigurationException
   {
     // update helm repo on the instance before installing/upgrading helm chart
@@ -190,12 +191,18 @@ public class HelmCmd
     cmd.append(helmBinaryLocation + " ");
     cmd.append("upgrade" + " ");
     cmd.append("--install" + " ");
-    // cmd.append("install" + " ");
     cmd.append(releaseName + " ");
     cmd.append(repoName + "/" + chartName + " ");
     cmd.append("-f" + " " + releaseName + "-values.yaml" + " ");
     cmd.append("--version" + " " + chartVersion + " ");
     cmd.append("--namespace" + " " + namespace + " ");
+    // adding command line parameters if present
+    Iterator<String> parametersIterator = parameters.iterator();
+    while (parametersIterator.hasNext())
+    {
+      String parameter = parametersIterator.next();
+      cmd.append("--set" + " " + parameter + " ");
+    }
     cmd.append("-o" + " " + "json" + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
 
