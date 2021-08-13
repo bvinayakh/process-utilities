@@ -17,19 +17,19 @@ import org.apache.commons.exec.PumpStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.process.utils.ApplicationProperties;
+import com.process.utils.JSONOM;
 
 public class Runner
 {
   public static final Logger logger = LoggerFactory.getLogger(Runner.class);
 
-  private ObjectMapper mapper = null;
+  private JSONOM mapper = null;
 
   public Runner()
   {
-    mapper = new ObjectMapper();
+    mapper = new JSONOM();
   }
 
   public JsonNode runExec(StringBuffer cmd) throws IOException, InterruptedException

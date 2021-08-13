@@ -1,8 +1,6 @@
 package com.process.containers;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ import com.process.utils.JSONOM;
 
 public class HelmCmd
 {
-  private boolean useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use_kubeconfig"));
+  private boolean useKubeconfig = false;
   private String helmBinaryLocation = ApplicationProperties.getProperties("helm_executable_location");
 
   private Runner runner = null;
@@ -33,6 +31,8 @@ public class HelmCmd
   {
     mapper = new JSONOM();
     runner = new Runner();
+
+    useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use_kubeconfig"));
   }
 
   public JsonNode helmRepoUpdate() throws IOException, InterruptedException

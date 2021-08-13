@@ -19,7 +19,7 @@ public class ApplicationProperties
 
   static
   {
-    if (!deploymentMode.equalsIgnoreCase("eks"))
+    if ((deploymentMode == null) || (!deploymentMode.equalsIgnoreCase("eks")))
     {
       log.info("Loading properties from ::: " + System.getProperty("user.home"));
       try
@@ -31,7 +31,6 @@ public class ApplicationProperties
       catch (IOException ioe)
       {
         log.info("Error reading properties. " + ioe.getMessage());
-        log.info("Properties not found switching to environment variables");
       }
     }
   }
@@ -42,7 +41,7 @@ public class ApplicationProperties
     if (isPropertiesFile) property = prop.getProperty(key);
     else
       property = System.getenv(key);
-
+    if (property == null) log.debug("Property {" + key + "} not found");
     return property;
   }
 }
