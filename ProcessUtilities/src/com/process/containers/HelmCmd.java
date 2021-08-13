@@ -8,6 +8,8 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.Map;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -19,6 +21,8 @@ import com.process.utils.JSONOM;
 
 public class HelmCmd
 {
+  static private Logger log = LoggerFactory.getLogger(HelmCmd.class);
+
   private boolean useKubeconfig = false;
   private String helmBinaryLocation = ApplicationProperties.getProperties("helm_executable_location");
 
@@ -33,6 +37,7 @@ public class HelmCmd
     runner = new Runner();
 
     useKubeconfig = Boolean.valueOf(ApplicationProperties.getProperties("use_kubeconfig"));
+    log.debug("kubeconfig is : " + useKubeconfig);
   }
 
   public JsonNode helmRepoUpdate() throws IOException, InterruptedException
