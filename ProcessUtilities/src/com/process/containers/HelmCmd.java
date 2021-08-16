@@ -98,7 +98,6 @@ public class HelmCmd
     cmd.append("uninstall" + " ");
     cmd.append(releaseName + " ");
     cmd.append("--namespace" + " " + namespace + " ");
-    cmd.append("-o" + " " + "json" + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
