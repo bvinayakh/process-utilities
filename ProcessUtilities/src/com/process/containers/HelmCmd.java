@@ -98,8 +98,9 @@ public class HelmCmd
     cmd.append("uninstall" + " ");
     cmd.append(releaseName + " ");
     cmd.append("--namespace" + " " + namespace + " ");
+    cmd.append("-o" + " " + "json" + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
-    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_locationlocation") + " ");
+    if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
     String result = outputNode.get("Result").asText();
