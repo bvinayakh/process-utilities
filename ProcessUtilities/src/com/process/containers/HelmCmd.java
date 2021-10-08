@@ -102,8 +102,12 @@ public class HelmCmd
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
+    System.out.println("outputnode");
+
     String result = outputNode.get("Result").asText();
+    System.out.println("result:" + result);
     String warning = outputNode.get("Warning").asText();
+    System.out.println("warning:" + warning);
     String error = outputNode.get("Error").asText();
     parentNode = mapper.createObjectNode();
 
