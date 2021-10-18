@@ -102,18 +102,19 @@ public class HelmCmd
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
     JsonNode outputNode = runner.runExec(cmd);
-    System.out.println("outputnode");
-
     String result = outputNode.get("Result").asText();
-    System.out.println("result:" + result);
     String warning = outputNode.get("Warning").asText();
-    System.out.println("warning:" + warning);
     String error = outputNode.get("Error").asText();
     parentNode = mapper.createObjectNode();
 
-    if (result.length() > 0) parentNode.putPOJO("Result", mapper.writeValueAsString(new String(Base64.getDecoder().decode(result))));
+    if (result.length() > 0)
+    {
+      log.debug(new String(Base64.getDecoder().decode(result)));
+      parentNode.putPOJO("Result", mapper.writeValueAsString(new String(Base64.getDecoder().decode(result))));
+    }
     if (warning.length() > 0)
     {
+      log.debug(new String(Base64.getDecoder().decode(warning)));
       String decodedWarning = new String(Base64.getDecoder().decode(warning));
       ObjectNode warningNode = mapper.createObjectNode();
       warningNode.putPOJO("Message", decodedWarning);
@@ -121,6 +122,7 @@ public class HelmCmd
     }
     if (error.length() > 0)
     {
+      new String(Base64.getDecoder().decode(error));
       String decodedError = new String(Base64.getDecoder().decode(error));
       ObjectNode errorNode = mapper.createObjectNode();
       errorNode.putPOJO("Message", decodedError);
