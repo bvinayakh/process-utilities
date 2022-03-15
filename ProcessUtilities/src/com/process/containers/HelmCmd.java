@@ -211,7 +211,7 @@ public class HelmCmd
     while (parametersIterator.hasNext())
     {
       String parameter = parametersIterator.next();
-      cmd.append("--set" + " '" + parameter + "' ");
+      cmd.append("--set" + " " + parameter + " ");
     }
     cmd.append("-o" + " " + "json" + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
