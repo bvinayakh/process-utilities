@@ -100,7 +100,7 @@ public class Runner
     outputNode.putPOJO("Result", encodedOutput);
     outputNode.putPOJO("Warning", encodedWarning);
     outputNode.putPOJO("Error", encodedError);
-
+    logger.debug("Execution Result :::" + outputNode);
     return outputNode;
   }
 

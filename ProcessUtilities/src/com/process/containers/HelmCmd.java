@@ -192,7 +192,7 @@ public class HelmCmd
   /*
    * releaseName: Helm Release Name
    */
-  public JsonNode helmUpgrade(String releaseName, String repoName, String chartName, String namespace, ArrayList<String> parameters)
+  public JsonNode helmUpgrade(String releaseName, String repoName, String chartName, String version, String namespace, ArrayList<String> parameters)
       throws IOException, InterruptedException, InvalidConfigurationException
   {
     // update helm repo on the instance before installing/upgrading helm chart
@@ -204,6 +204,8 @@ public class HelmCmd
     cmd.append("--install" + " ");
     cmd.append(releaseName + " ");
     cmd.append(repoName + "/" + chartName + " ");
+    // if the user wants the latest version in repo then dont add the version parameter
+    if (!version.equalsIgnoreCase("latest")) cmd.append("--version" + " " + version + " ");
     cmd.append("-f" + " " + releaseName + "-values.yaml" + " ");
     cmd.append("--namespace" + " " + namespace + " ");
     // adding command line parameters if present
