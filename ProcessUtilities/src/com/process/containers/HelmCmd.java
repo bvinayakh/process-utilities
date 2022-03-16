@@ -264,6 +264,7 @@ public class HelmCmd
     cmd.append("list" + " ");
     cmd.append("-a -A" + " ");
     cmd.append("-o" + " " + "json" + " ");
+    cmd.append("-n" + " " + namespace + " ");
     if (Boolean.valueOf(ApplicationProperties.getProperties("debug_enabled"))) cmd.append("--debug" + " ");
     if (useKubeconfig) cmd.append("--kubeconfig" + " " + ApplicationProperties.getProperties("config_file_location") + " ");
 
